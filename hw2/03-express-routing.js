@@ -1,4 +1,4 @@
-const express = require('express');
+const express = require("express");
 const app = express();
 const port = process.env.PORT || 5001;
 
@@ -13,21 +13,45 @@ const port = process.env.PORT || 5001;
 // For other routes, such as http://localhost:5001/other, this exercise should return a status code 404 with '404 - page not found' in html format
 
 const routes = [
-  'welcome',
-  'redirect',
-  'redirected',
-  'cache',
-  'cookie',
-  'other',
+  "welcome",
+  "redirect",
+  "redirected",
+  "cache",
+  "cookie",
+  "other",
 ];
 
-app.get('/', (req, res) => {
+app.get("/", (req, res) => {
   res.status(200);
-  res.set({ 'Content-Type': 'text/html' });
-  res.send('Express Routing Exercise');
+  res.set({ "Content-Type": "text/html" });
+  res.send("Express Routing Exercise");
 });
 
-// Add your code here
+app.get("/welcome", (req, res) => {
+  res.status(200).send("Welcome!");
+});
+
+app.get("/redirect", (req, res) => {
+  res.redirect(302, "/redirected");
+});
+
+app.get("/redirected", (req, res) => {
+  res.status(200).send("You have been redirected");
+});
+
+app.get("/cache", (req, res) => {
+  res.set("Cache-Control", "public, max-age=86400");
+  res.send("This resource has been cached");
+});
+
+app.get("/cookie", (req, res) => {
+  res.cookie("hello", "world");
+  res.send("mmm... cookie");
+});
+
+app.use((req, res) => {
+  res.status(404).send("404 - Page not found");
+});
 
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
